@@ -25,6 +25,9 @@ def boundedReciprocalPolyCoefs(d, M):
 
 # computes the galois group for the given polynomial.
 def getGalois(poly):
+    # make sure the polynomial is not reducible before
+    # computing its Galois group
+    # assert poly.is_irreducible
     K.<a> = NumberField(poly)
     G = K.galois_group()
     return G
@@ -43,5 +46,8 @@ for polyCoefs in polys:
     print("Polynomial " + str(k) + ":")
     print(polyCoefs)
     print(R(polyCoefs))
-    print(getGalois(R(polyCoefs)))
+    try:
+        print(getGalois(R(polyCoefs)))
+    except:
+        print("Polynomial is reducible.")
     k += 1
