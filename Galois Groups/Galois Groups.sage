@@ -9,7 +9,7 @@ def boundedReciprocalPolyCoefs(d, M):
     print(bounds)
     
     # this is done to account for the fact that the xmrange function always starts at 0
-    tempBounds = [2 * bound for bound in bounds]
+    tempBounds = [2 * bound + 1 for bound in bounds]
     possibleCoef = list(xmrange(tempBounds))
     
     # shift the values back to fix the coefficients, and add the remaining coefficients
@@ -34,7 +34,7 @@ def getGalois(poly):
 
 polys = boundedReciprocalPolyCoefs(4, 1.3)
 
-# I think there is a slight issue with the bounds, because I see no positive 6's.
+
 print(polys)
 
 # Define a polynomial ring for our polynomials
