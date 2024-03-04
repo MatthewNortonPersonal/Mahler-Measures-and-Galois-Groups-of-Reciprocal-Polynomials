@@ -26,7 +26,7 @@ def boundedReciprocalPolyCoefs(d, M):
 	# filter out all the polynomials with 0 as the first coefficient (since this would mean the
 	# degree of the polynomial would be less than d)
 	for polyCoefs in possiblePoly:
-		if polyCoefs[0] == 0:
+		if polyCoefs[0] == 0 or not convertToPoly(polyCoefs).is_irreducible():
 			possiblePoly.remove(polyCoefs) # this might be slow, maybe it would be better to use indices
 
 	return possiblePoly
@@ -42,7 +42,7 @@ def getGalois(poly):
 
 def convertToPoly(coefs):
 	# Define a polynomial ring for our polynomials and convert coefs to poly using this ring
-	R = PolynomialRing(CC, 'x')
+	R = PolynomialRing(QQ, 'x')
 	return R(coefs)
 
 
@@ -50,6 +50,8 @@ def convertToPoly(coefs):
 
 #Returns roots w norm greater than 1
 def bigRoots(poly): 
+    S.<x> = PolynomialRing(CC)
+    poly = S(poly)
     rootList = poly.roots()
     bigRootList = []
     for r in rootList:
@@ -59,7 +61,7 @@ def bigRoots(poly):
     return bigRootList
 
 def realRoots(poly): 
-    rootList = list(f.roots())
+    rootList = list(poly.roots())
     realRootList = []
     for r in rootList:
         if r[0] == conjugate(r[0]):
@@ -93,7 +95,7 @@ def KitchenSink(poly):
 	# poly, degree, Mahler measure, roots outside unit circle, # real roots, trace poly, galois of poly, galois of trace, discriminant, 
     trace = tracePoly(poly)
     return [poly 
-            , poly.degree(x)
+            , poly.degree()
             , mahlerMeasure(poly) 
             , bigRoots(poly) # roots outside unit circle
             , realRoots(poly) 
@@ -111,11 +113,12 @@ print(polys)
 
 k = 1
 for polyCoefs in polys:
-	print("Polynomial " + str(k) + ":")
-	print(polyCoefs)
-	print(R(polyCoefs))
-	try:
-			print(KitchenSink(convertToPoly(polyCoefs)))
-	except:
-			print("Polynomial is reducible.")
-	k += 1
+    print("Polynomial " + str(k) + ":")
+    print(polyCoefs)
+    poly = convertToPoly(polyCoefs)
+    print(poly)
+    #try:
+    print(KitchenSink(convertToPoly(polyCoefs)))
+    #except:
+    #        print("Polynomial is reducible.")
+    k += 1
