@@ -18,16 +18,16 @@ def boundedReciprocalPolyCoefs(d, M):
 	# (for the terms of degree n + 1 or higher)
 	# these are known since the polynomial is reciprocal
 	for coefs in possibleCoef:
-			fixedCoefs = [int(coefs[i] - bounds[i]) for i in range(len(bounds))]
-			remainingCoefs = [fixedCoefs[n - (i + 1)] for i in range(n)]
-			fixedCoefs.extend(remainingCoefs)
-			possiblePoly.append(fixedCoefs)
+		fixedCoefs = [int(coefs[i] - bounds[i]) for i in range(len(bounds))]
+		remainingCoefs = [fixedCoefs[n - (i + 1)] for i in range(n)]
+		fixedCoefs.extend(remainingCoefs)
+		possiblePoly.append(fixedCoefs)
 
 	# filter out all the polynomials with 0 as the first coefficient (since this would mean the
 	# degree of the polynomial would be less than d)
 	for polyCoefs in possiblePoly:
-			if polyCoefs[0] == 0:
-					possiblePoly.remove(polyCoefs) # this might be slow, maybe it would be better to use indices
+		if polyCoefs[0] == 0:
+			possiblePoly.remove(polyCoefs) # this might be slow, maybe it would be better to use indices
 
 	return possiblePoly
 
@@ -41,10 +41,10 @@ def getGalois(poly):
 	return G
 
 def convertToPoly(coefs):
+	# Define a polynomial ring for our polynomials and convert coefs to poly using this ring
 	R = PolynomialRing(CC, 'x')
 	return R(coefs)
 
-# Define a polynomial ring for our polynomials
 
 # function to get the roots and Mahler measure
 
