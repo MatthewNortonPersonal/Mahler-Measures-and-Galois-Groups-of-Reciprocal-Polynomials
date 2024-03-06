@@ -1,4 +1,4 @@
-def boundedReciprocalPolyCoefs(d, M):
+def boundedReciprocalPolys(d, M):
 	possiblePoly = []
 	assert d % 2 == 0
 	n = d / 2
@@ -26,10 +26,32 @@ def boundedReciprocalPolyCoefs(d, M):
 	# filter out all the polynomials with 0 as the first coefficient (since this would mean the
 	# degree of the polynomial would be less than d)
 	for polyCoefs in possiblePoly:
-		if polyCoefs[0] == 0 or not convertToPoly(polyCoefs).is_irreducible():
-			possiblePoly.remove(polyCoefs) # this might be slow, maybe it would be better to use indices
+		if polyCoefs[0] == 0:
+			possiblePoly.remove(polyCoefs) # this might be slow, might there be a better way to do this?
 
-	return possiblePoly
+    # and filter out any reducible polynomials as well
+
+	# convert the 
+	possiblePoly = convertToPolys(possiblePoly)
+
+	filteredPolys = filterOutReducibles(possiblePoly)
+
+	return filteredPolys
+
+# converts a list of polynomial coefficients to a polynomial object
+def convertToPolys(polyCoefs):
+	convertedList = []
+	for coefs in polyCoefs:
+		convertedList.append(convertToPoly(coefs))
+	return convertedList
+
+# filters out the reducibles from the list of polynomial objects
+def filterOutReducibles(polys):
+	newPolys = []
+	for poly in polys:
+		if poly.is_irreducible():
+			newPolys.append(poly)
+	return newPolys
 
 # computes the galois group for the given polynomial.
 def getGalois(poly):
@@ -91,7 +113,7 @@ def tracePoly(poly):
 # ((f) poly, roots of f outside unit circle, # of real roots, (g) trace poly, G_f, G_g, Mahler, disc)
 # collect data into a csv (so we can plot it)
 
-def KitchenSink(poly):
+def getStats(poly):
 	# poly, degree, Mahler measure, roots outside unit circle, # real roots, trace poly, galois of poly, galois of trace, discriminant, 
     trace = tracePoly(poly)
     return [poly 
@@ -107,18 +129,22 @@ def KitchenSink(poly):
 
 # decomposition groups
 
-polys = boundedReciprocalPolyCoefs(4, 1.3)
+polys = boundedReciprocalPolys(4, 1.3)
 
-print(polys)
-
-k = 1
-for polyCoefs in polys:
-    print("Polynomial " + str(k) + ":")
-    print(polyCoefs)
-    poly = convertToPoly(polyCoefs)
-    print(poly)
-    #try:
-    print(KitchenSink(convertToPoly(polyCoefs)))
-    #except:
-    #        print("Polynomial is reducible.")
-    k += 1
+# print(polys)
+# 
+# k = 1
+# for polyCoefs in polys:
+#     print("Polynomial " + str(k) + ":")
+#     print(polyCoefs)
+#     poly = convertToPoly(polyCoefs)
+#     print(poly)
+#     #try:
+#     print("irreducible: " + str(poly.is_irreducible()))
+#     if not poly.is_irreducible():
+#         continue
+#     print(getStats(convertToPoly(polyCoefs)))
+#     
+#     #except:
+#     #        print("Polynomial is reducible.")
+#     k += 1
